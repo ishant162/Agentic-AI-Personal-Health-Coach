@@ -1,0 +1,13 @@
+ipykernel
+python-dotenv
+langchain
+langgraph
+langchain-openai
+langchain-community
+langchain-core
+langchain-groq
+langchain-ollama
+faiss-cpu
+chromadb
+langchain_chroma
+streamlit
