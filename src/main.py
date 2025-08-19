@@ -7,13 +7,17 @@ from src.graph.graph_builder import GraphBuilder
 
 def load_health_agent():
     # LoadUI
-    ui = LoadStreamlitUI()
-    user_input = ui.load_ui()
+    # ui = LoadStreamlitUI()
+    user_input = input("Please enter your health-related query: ")
 
-    if not user_input:
-        st.error("No user input provided. Please select options from the sidebar.")
-        return
+    # if not user_input:
+    #     st.error(
+    #         "Please provide your input"
+    #     )
+    #     return
 
     llm = GroqLLM().get_llm_model()
     graph_builder = GraphBuilder(llm)
-    graph = graph_builder.health_agent_workflow()
+    graph = graph_builder.setup_graph()
+    response = graph.invoke({"user_input": user_input})
+    print(response["llm_response"])

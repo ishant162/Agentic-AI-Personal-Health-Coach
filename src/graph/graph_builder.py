@@ -8,20 +8,20 @@ class GraphBuilder:
         self.llm = model
         self.graph_builder = StateGraph(State)
 
-    def health_agent_workflow(self):
+    def health_agent_workflow_nodes(self):
         """
-        Build the health agent workflow graph.
+        Set the health agent workflow nodes.
         """
-
         self.health_agent_node = HealthAgentNode(self.llm)
 
+        # Adding nodes
         self.graph_builder.add_node(
             "InputParser",
             self.health_agent_node.input_parser
         )
         self.graph_builder.add_node(
-            "LLMResponder",
-            self.health_agent_node.llm_responder
+            "EHRConnector",
+            self.health_agent_node.ehr_connector
         )
         self.graph_builder.add_node(
             "PromptEngineer",
@@ -40,6 +40,34 @@ class GraphBuilder:
             self.health_agent_node.execution_manager
         )
         self.graph_builder.add_node(
-            "EHRConnector",
-            self.health_agent_node.ehr_connector
+            "LLMResponder",
+            self.health_agent_node.llm_responder
         )
+
+    def health_agent_workflow_edges(self):
+        """
+        Set the health agent workflow edges.
+        """
+        self.graph_builder.add_edge(START, "InputParser")
+        self.graph_builder.add_conditional_edges(
+            "InputParser",
+            self.health_agent_node.inference_decision_node,
+            {
+                "Positive": "LLMResponder",
+                "Negative": "EHRConnector"
+            }
+        )
+        self.graph_builder.add_edge("EHRConnector", "PromptEngineer")
+        self.graph_builder.add_edge("PromptEngineer", "RiskEvaluator")
+        self.graph_builder.add_edge("RiskEvaluator", "DecisionPlanner")
+        self.graph_builder.add_edge("DecisionPlanner", "ExecutionManager")
+        self.graph_builder.add_edge("LLMResponder", END)
+
+    def setup_graph(self):
+        """
+        Setup the graph.
+        """
+        self.health_agent_workflow_nodes()
+        self.health_agent_workflow_edges()
+
+        return self.graph_builder.compile()
