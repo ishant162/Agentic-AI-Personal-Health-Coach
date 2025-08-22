@@ -1,3 +1,6 @@
+import pandas as pd
+
+
 def parse_user_input(llm, user_input):
     """
     Parses the user input and converts symptoms into a JSON-like dictionary.
@@ -21,8 +24,8 @@ def parse_user_input(llm, user_input):
     If there are no concerning symptoms mentioned, respond with the string:
     "no symptoms": true
 
-    The output should be just the JSON dictionary strictly. The output should be
-    strictly formatted as JSON.
+    The output should be just the JSON dictionary strictly. The output should 
+    be strictly formatted as JSON.
     """
 
     response = llm.invoke(prompt)
@@ -31,8 +34,9 @@ def parse_user_input(llm, user_input):
     return response.content
 
 
-def generate_inference_prompt(llm, parsed_input):
+def generate_inference_prompt(ehr_data):
     """
     Generates the inference prompt for calculating the risk score
     """
-    pass
+    evaluator_data = pd.DataFrame([ehr_data])
+    return evaluator_data

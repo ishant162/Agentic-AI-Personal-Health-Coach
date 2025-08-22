@@ -9,6 +9,7 @@ def load_health_agent():
     # LoadUI
     # ui = LoadStreamlitUI()
     user_input = input("Please enter your health-related query: ")
+    patient_id = input("Please enter the Patient ID: ")
 
     # if not user_input:
     #     st.error(
@@ -19,5 +20,8 @@ def load_health_agent():
     llm = GroqLLM().get_llm_model()
     graph_builder = GraphBuilder(llm)
     graph = graph_builder.setup_graph()
-    response = graph.invoke({"user_input": user_input})
+    response = graph.invoke({
+        "user_input": user_input,
+        "patient_id": patient_id
+    })
     print(response["llm_response"])

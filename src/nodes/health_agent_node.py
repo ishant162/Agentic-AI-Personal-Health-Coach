@@ -1,6 +1,12 @@
 from src.state.state import State
-from src.layers.prompt_engineering_layer import parse_user_input
-from src.layers.decision_layer import inference_decision
+from src.layers.prompt_engineering_layer import (
+    parse_user_input, 
+    generate_inference_prompt
+)
+from src.layers.decision_layer import inference_decision, next_action
+from src.layers.inference_layer import inference_on_patient_data
+from src.layers.execution_layer import execute_actions
+from src.tools.get_ehr_data import get_ehr_data
 
 
 class HealthAgentNode:
@@ -55,14 +61,16 @@ class HealthAgentNode:
 
     def prompt_engineer(self, state: State) -> State:
         print("Engineering prompt with EHR data...")
-        state["engineered_prompt"] = (
-            f"Prompt({state.get('llm_response', '')} + {state.get('ehr_data', '')})"
+        state["engineered_prompt"] = generate_inference_prompt(
+            state["ehr_data"]
         )
         return state
 
     def risk_evaluator(self, state: State) -> State:
         print("Evaluating health risk...")
-        state["risk_score"] = f"RiskScore({state.get('engineered_prompt', '')})"
+        state["risk_score"] = inference_on_patient_data(
+            state["engineered_prompt"]
+        )
         return state
 
     def inference_decision_node(self, state: State) -> State:
@@ -75,15 +83,17 @@ class HealthAgentNode:
 
     def decision_planner(self, state: State) -> State:
         print("Planning next steps based on risk score...")
-        state["action_plan"] = f"Plan({state.get('risk_score', '')})"
+        state["action_plan"] = next_action(state["risk_score"])
         return state
 
     def execution_manager(self, state: State) -> State:
         print("Executing planned actions...")
-        state["execution_result"] = f"Executed({state.get('action_plan', '')})"
+        state["execution_result"] = execute_actions(
+            state["action_plan"], self.llm
+        )
         return state
 
     def ehr_connector(self, state: State) -> State:
         print("Fetching EHR data...")
-        state["ehr_data"] = "EHRData(PatientID)"
+        state["ehr_data"] = get_ehr_data(state["patient_id"])
         return state
