@@ -18,13 +18,13 @@ def parse_user_input(llm, user_input):
         "fatigue": true,
         "poor_sleep": true
     }}
-    Only include symptoms mentioned in the input. Do not infer or add 
+    Only include symptoms mentioned in the input. Do not infer or add
     extra symptoms.
 
     If there are no concerning symptoms mentioned, respond with the string:
     "no symptoms": true
 
-    The output should be just the JSON dictionary strictly. The output should 
+    The output should be just the JSON dictionary strictly. The output should
     be strictly formatted as JSON.
     """
 

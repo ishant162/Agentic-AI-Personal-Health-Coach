@@ -19,7 +19,7 @@ def execute_actions(actions, patient_id, llm):
     2. Schedule a follow-up appointment for Patient_ID {patient_id}.
     3. Notify the care team about Patient_ID {patient_id}.
 
-    After completing these tasks, provide a brief summary of what actions were 
+    After completing these tasks, provide a brief summary of what actions were
     taken and confirm their completion.
     """
     messages = [
