@@ -1,4 +1,4 @@
-from src.tools.execution_tools import get_tools
+from src.tools.execution_tools import get_tools, create_tool_node
 
 
 def execute_actions(actions, llm):
@@ -8,5 +8,6 @@ def execute_actions(actions, llm):
     if "no_symptoms" in actions:
         return "No action needed, patient is healthy."
     else:
-        llm_tools = llm.bind_tools(get_tools())
-        llm_tools.invoke(actions)
+        tools = get_tools()
+        tool_node = create_tool_node(tools)
+

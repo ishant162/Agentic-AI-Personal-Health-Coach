@@ -6,7 +6,7 @@ def get_ehr_data(patient_id):
     Gets EHR data for a specific patient.
     """
     # Load the dataset
-    df = pd.read_csv('heart_with_patient_id.csv')
+    df = pd.read_csv('./src/ehr_database/ehr_data.csv')
     # Filter the row with the given Patient_ID
     patient_data = df[df['Patient_ID'] == patient_id]
     # Check if patient exists

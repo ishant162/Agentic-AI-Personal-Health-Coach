@@ -1,4 +1,5 @@
 import pandas as pd
+from langgraph.prebuilt import ToolNode
 
 
 def update_ehr(patient_id):
@@ -53,3 +54,15 @@ def get_tools():
         list: A list of tool names.
     """
     return [update_ehr, schedule_appointment, notify_care_team]
+
+
+def create_tool_node(tools):
+    """
+    Create a tool node for the graph.
+    This function initializes a ToolNode with the provided tools
+    and returns it.
+
+    Args:
+        tools (list): A list of tool functions.
+    """
+    return ToolNode(tools=tools)

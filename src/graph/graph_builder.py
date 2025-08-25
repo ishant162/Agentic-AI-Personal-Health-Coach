@@ -1,6 +1,8 @@
 from langgraph.graph import StateGraph, START, END
+
 from src.state.state import State
 from src.nodes.health_agent_node import HealthAgentNode
+from src.tools.execution_tools import get_tools, create_tool_node
 
 
 class GraphBuilder:
@@ -12,9 +14,14 @@ class GraphBuilder:
         """
         Set the health agent workflow nodes.
         """
+        tool_node = create_tool_node(get_tools())
         self.health_agent_node = HealthAgentNode(self.llm)
 
         # Adding nodes
+        self.graph_builder.add_node(
+            "tools",
+            tool_node
+        )
         self.graph_builder.add_node(
             "InputParser",
             self.health_agent_node.input_parser
@@ -57,10 +64,12 @@ class GraphBuilder:
                 "Negative": "EHRConnector"
             }
         )
+
         self.graph_builder.add_edge("EHRConnector", "PromptEngineer")
         self.graph_builder.add_edge("PromptEngineer", "RiskEvaluator")
         self.graph_builder.add_edge("RiskEvaluator", "DecisionPlanner")
-        self.graph_builder.add_edge("DecisionPlanner", "ExecutionManager")
+        self.graph_builder.add_edge("DecisionPlanner", END)
+        # self.graph_builder.add_edge("DecisionPlanner", "ExecutionManager")
         self.graph_builder.add_edge("LLMResponder", END)
 
     def setup_graph(self):

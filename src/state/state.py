@@ -7,7 +7,7 @@ class State(TypedDict):
     Represent the structure of the state used in graph.
     """
     user_input: str  # Required
-    patient_id: str  # Required
+    patient_id: int  # Required
     parsed_input: Optional[str]
     inference_decision: Optional[str]
     ehr_data: Optional[dict]
