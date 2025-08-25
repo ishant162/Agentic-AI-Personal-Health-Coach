@@ -1,5 +1,6 @@
-from typing_extensions import TypedDict, Optional
+from typing_extensions import TypedDict, Optional, List
 from pandas.core.frame import DataFrame
+from langchain_core.messages import BaseMessage
 
 
 class State(TypedDict):
@@ -8,11 +9,11 @@ class State(TypedDict):
     """
     user_input: str  # Required
     patient_id: int  # Required
+    messages: Optional[List[BaseMessage]]
     parsed_input: Optional[str]
     inference_decision: Optional[str]
     ehr_data: Optional[dict]
     engineered_prompt: DataFrame
     risk_score: Optional[int]
     action_plan: Optional[list]
-    execution_result: Optional[str]
     llm_response: Optional[str]

@@ -19,4 +19,7 @@ def load_health_agent():
         "user_input": user_input,
         "patient_id": patient_id
     })
-    print(response.items())
+    for k, v in response.items():
+        print("*"*50)
+        print(f"{k}: {v}")
+        print("*"*50)

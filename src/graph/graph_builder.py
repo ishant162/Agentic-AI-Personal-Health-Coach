@@ -1,4 +1,6 @@
 from langgraph.graph import StateGraph, START, END
+from langgraph.prebuilt import tools_condition
+
 
 from src.state.state import State
 from src.nodes.health_agent_node import HealthAgentNode
@@ -68,8 +70,19 @@ class GraphBuilder:
         self.graph_builder.add_edge("EHRConnector", "PromptEngineer")
         self.graph_builder.add_edge("PromptEngineer", "RiskEvaluator")
         self.graph_builder.add_edge("RiskEvaluator", "DecisionPlanner")
-        self.graph_builder.add_edge("DecisionPlanner", END)
-        # self.graph_builder.add_edge("DecisionPlanner", "ExecutionManager")
+        self.graph_builder.add_conditional_edges(
+            "DecisionPlanner",
+            self.health_agent_node.decision_planner_node,
+            {
+                "Positive": "ExecutionManager",
+                "Negative": "LLMResponder"
+            }
+        )
+        self.graph_builder.add_conditional_edges(
+            "ExecutionManager",
+            tools_condition
+        )
+        self.graph_builder.add_edge("tools", "LLMResponder")
         self.graph_builder.add_edge("LLMResponder", END)
 
     def setup_graph(self):

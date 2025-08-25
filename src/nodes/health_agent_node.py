@@ -1,6 +1,6 @@
 from src.state.state import State
 from src.layers.prompt_engineering_layer import (
-    parse_user_input, 
+    parse_user_input,
     generate_inference_prompt
 )
 from src.layers.decision_layer import inference_decision, next_action
@@ -28,29 +28,38 @@ class HealthAgentNode:
 
     def llm_responder(self, state: State) -> State:
         """
-        Generates a response from the LLM based on the parsed input.
+        Generates a response from the LLM based on the execution result.
         """
         print("Generating LLM response...")
         llm = self.llm
-        user_input = state.get("user_input", "")
+        action_plan = state.get("action_plan", "")
 
         # if state.get("inference_decision") == "Positive":
         prompt = f"""
-        You are a friendly and professional medical assistant. Based on 
-        the analysis, the patient has no concerning symptoms.
+        You are a friendly and professional medical assistant.
 
-        Here is the patient's input:
-        "{user_input}"
+        Here is a summary of the patient's current health-related actions:
+        {action_plan}
 
-        Please generate a short, reassuring message to let the patient 
-        know they are perfectly fine and healthy. The tone should be warm,
-        supportive, and clear.
+        Please analyze this summary and generate a short, empathetic message
+        for the patient:
+        - If the actions suggest no concerning symptoms (e.g., "no_symptoms"),
+            reassure the patient warmly.
+        - If the actions suggest follow-up steps (e.g., "schedule_appointment"
+            , "notify_care_team", "update_ehr"), explain them clearly and
+            kindly.
+        - Always keep the tone supportive, respectful, and easy to understand.
+        - Do not include any technical terms or internal instructions—just a
+            patient-facing message.
 
-        Example:
-        "Great news! Based on your input, there are no concerning symptoms.
-        You seem to be in good health.
-        Keep taking care of yourself and feel free to reach out if
-        anything changes."
+        Examples:
+        Healthy: "Great news! Based on your recent health check, everything
+        looks good. You're in great shape. Keep taking care of yourself,
+        and don't hesitate to reach out if anything changes."
+
+        Concern: "We've identified a few things that may need attention. We've
+        taken steps to ensure you're well cared for. Please follow up with your
+        care team, and remember we're here to support you."
 
         Respond with just the message.
         """
@@ -86,10 +95,16 @@ class HealthAgentNode:
         state["action_plan"] = next_action(state["risk_score"])
         return state
 
+    def decision_planner_node(self, state: State) -> str:
+        if "no_symptoms" in state.get("action_plan", []):
+            return "Negative"
+        else:
+            return "Positive"
+
     def execution_manager(self, state: State) -> State:
         print("Executing planned actions...")
-        state["execution_result"] = execute_actions(
-            state["action_plan"], self.llm
+        state["messages"] = execute_actions(
+            state["action_plan"], state["patient_id"], self.llm
         )
         return state
 
