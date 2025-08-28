@@ -1,3 +1,5 @@
+"""Main Module"""
+
 import streamlit as st
 
 from src.ui.streamlitui.load_ui import LoadStreamlitUI
@@ -7,6 +9,7 @@ from src.graph.graph_builder import GraphBuilder
 
 
 def load_health_agent():
+    """Load and build the health agent components."""
     # LoadUI
     # ui = LoadStreamlitUI()
     user_input = input("Please enter your health-related query: ")

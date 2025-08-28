@@ -1,3 +1,5 @@
+"""Graph Builder Module"""
+
 from langgraph.graph import StateGraph, START, END
 from langgraph.prebuilt import tools_condition
 
@@ -8,6 +10,10 @@ from src.tools.execution_tools import get_tools, create_tool_node
 
 
 class GraphBuilder:
+    """
+    Build a state graph for the health agent.
+    """
+
     def __init__(self, model):
         self.llm = model
         self.graph_builder = StateGraph(State)

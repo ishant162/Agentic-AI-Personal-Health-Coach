@@ -1,3 +1,5 @@
+"""Health Agent Node Module"""
+
 from src.state.state import State
 from src.layers.prompt_engineering_layer import (
     parse_user_input,
@@ -69,6 +71,7 @@ class HealthAgentNode:
         return state
 
     def prompt_engineer(self, state: State) -> State:
+        """Engineers the prompt for the Inference Model"""
         print("Engineering prompt with EHR data...")
         state["engineered_prompt"] = generate_inference_prompt(
             state["ehr_data"]
@@ -76,6 +79,7 @@ class HealthAgentNode:
         return state
 
     def risk_evaluator(self, state: State) -> State:
+        """Evaluates the health risk based on the engineered prompt."""
         print("Evaluating health risk...")
         state["risk_score"] = inference_on_patient_data(
             state["engineered_prompt"]
@@ -83,6 +87,7 @@ class HealthAgentNode:
         return state
 
     def inference_decision_node(self, state: State) -> State:
+        """Makes a decision based on the inference results."""
         print("Planning next steps based on risk score...")
         result = inference_decision(
             state.get("parsed_input", '')
@@ -91,17 +96,20 @@ class HealthAgentNode:
         return result
 
     def decision_planner(self, state: State) -> State:
+        """Plans the next steps based on the risk score."""
         print("Planning next steps based on risk score...")
         state["action_plan"] = next_action(state["risk_score"])
         return state
 
     def decision_planner_node(self, state: State) -> str:
+        """Determines the next node in the decision planning process."""
         if "no_symptoms" in state.get("action_plan", []):
             return "Negative"
         else:
             return "Positive"
 
     def execution_manager(self, state: State) -> State:
+        """Executes the planned actions."""
         print("Executing planned actions...")
         state["messages"] = execute_actions(
             state["action_plan"], state["patient_id"], self.llm
@@ -109,6 +117,7 @@ class HealthAgentNode:
         return state
 
     def ehr_connector(self, state: State) -> State:
+        """Fetches EHR data for the patient."""
         print("Fetching EHR data...")
         state["ehr_data"] = get_ehr_data(state["patient_id"])
         return state

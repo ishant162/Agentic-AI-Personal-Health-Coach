@@ -1,3 +1,5 @@
+"""Groq LLM Module"""
+
 import os
 
 from dotenv import load_dotenv

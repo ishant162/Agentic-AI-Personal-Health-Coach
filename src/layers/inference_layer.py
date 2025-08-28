@@ -1,3 +1,5 @@
+"""Inference Layer Module"""
+
 import tensorflow as tf
 
 

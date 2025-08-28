@@ -1,3 +1,5 @@
+"""Streamlit UI Loader Module"""
+
 import streamlit as st
 
 
@@ -10,6 +12,9 @@ class LoadStreamlitUI:
         self.title = "Agentic AI Health Coach"
 
     def load_ui(self):
+        """
+        Load the Streamlit UI components.
+        """
         # App title
         st.title(self.title)
 

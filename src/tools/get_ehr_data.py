@@ -1,3 +1,5 @@
+"""EHR Data Retrieval Module"""
+
 import pandas as pd
 
 
