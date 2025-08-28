@@ -18,7 +18,7 @@ class GraphBuilder:
         self.llm = model
         self.graph_builder = StateGraph(State)
 
-    def health_agent_workflow_nodes(self):
+    def health_agent_workflow_nodes(self) -> None:
         """
         Set the health agent workflow nodes.
         """
@@ -59,7 +59,7 @@ class GraphBuilder:
             self.health_agent_node.llm_responder
         )
 
-    def health_agent_workflow_edges(self):
+    def health_agent_workflow_edges(self) -> None:
         """
         Set the health agent workflow edges.
         """
@@ -91,7 +91,7 @@ class GraphBuilder:
         self.graph_builder.add_edge("tools", "LLMResponder")
         self.graph_builder.add_edge("LLMResponder", END)
 
-    def setup_graph(self):
+    def setup_graph(self) -> StateGraph:
         """
         Setup the graph.
         """
