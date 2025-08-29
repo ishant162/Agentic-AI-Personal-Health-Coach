@@ -5,7 +5,7 @@ from src.layers.prompt_engineering_layer import (
     parse_user_input,
     generate_inference_prompt
 )
-from src.layers.decision_layer import inference_decision, next_action
+from src.layers.decision_layer import llm_inference_decision, next_action
 from src.layers.inference_layer import inference_on_patient_data
 from src.layers.execution_layer import execute_actions
 from src.tools.get_ehr_data import get_ehr_data
@@ -86,14 +86,23 @@ class HealthAgentNode:
         )
         return state
 
-    def inference_decision_node(self, state: State) -> State:
-        """Makes a decision based on the inference results."""
-        print("Planning next steps based on risk score...")
-        result = inference_decision(
-            state.get("parsed_input", '')
+    def inference_decision(self, state: State) -> str:
+        """Makes a decision based on the inference results using LLM."""
+        print("Planning next steps based on risk assessment...")
+
+        parsed_input = state.get("parsed_input", '')
+        result = llm_inference_decision(
+            parsed_input, self.llm
         )
-        state["inference_decision"] = result
-        return result
+
+        # Store the full decision context as a dict in state
+        state["inference_decision"] = {
+            "decision": result.decision,
+            "confidence": result.confidence,
+            "reasoning": result.reasoning
+        }
+
+        return result.decision
 
     def decision_planner(self, state: State) -> State:
         """Plans the next steps based on the risk score."""

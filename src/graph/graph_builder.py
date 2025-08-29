@@ -17,13 +17,13 @@ class GraphBuilder:
     def __init__(self, model):
         self.llm = model
         self.graph_builder = StateGraph(State)
+        self.health_agent_node = HealthAgentNode(self.llm)
 
     def health_agent_workflow_nodes(self) -> None:
         """
         Set the health agent workflow nodes.
         """
         tool_node = create_tool_node(get_tools())
-        self.health_agent_node = HealthAgentNode(self.llm)
 
         # Adding nodes
         self.graph_builder.add_node(
@@ -66,7 +66,7 @@ class GraphBuilder:
         self.graph_builder.add_edge(START, "InputParser")
         self.graph_builder.add_conditional_edges(
             "InputParser",
-            self.health_agent_node.inference_decision_node,
+            self.health_agent_node.inference_decision,
             {
                 "Positive": "LLMResponder",
                 "Negative": "EHRConnector"

@@ -1,8 +1,17 @@
 """State Module"""
 
+from typing import Literal
 from typing_extensions import TypedDict, Optional, List
 from pandas.core.frame import DataFrame
 from langchain_core.messages import BaseMessage
+from pydantic import BaseModel
+
+
+class InferenceDecision(BaseModel):
+    """Structured output for inference decision."""
+    decision: Literal["Positive", "Negative"]
+    confidence: float
+    reasoning: str
 
 
 class State(TypedDict):
@@ -13,7 +22,7 @@ class State(TypedDict):
     patient_id: int  # Required
     messages: Optional[List[BaseMessage]]
     parsed_input: Optional[str]
-    inference_decision: Optional[str]
+    inference_decision: Optional[InferenceDecision]
     ehr_data: Optional[dict]
     engineered_prompt: DataFrame
     risk_score: Optional[int]
