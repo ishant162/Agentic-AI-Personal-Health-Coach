@@ -33,3 +33,33 @@ A digital health agent, powered by an LLM and deployed within each hospital or c
     Pulls in clinical data with patient consent to contextualize recommendations.
 	- Mobile/Web App:
     Patient interface for interaction, alerts, vitals input, reminders.
+
+## 🚀 Installation & Running Instructions
+
+Follow the steps below to set up and run the project locally:
+
+1. **Create a Python virtual environment**  
+   ```bash
+   python -m venv venv
+   source venv/bin/activate   # On Mac/Linux
+   venv\Scripts\activate      # On Windows
+
+2.	**Clone the repository**
+	```bash
+ 	git clone https://github.com/ishant162/Agentic-AI-Personal-Health-Coach.git
+	cd Agentic-AI-Personal-Health-Coach
+
+3. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   
+4. **Create a .env file**
+   Add your API key inside .env file in the project root:
+   ```bash
+   OPENAI_API_KEY=your_openai_api_key_here
+	# or
+   GROQ_API_KEY=your_groq_api_key_here
+   
+5. **Run the app**
+   ```bash
+   python app.py
