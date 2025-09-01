@@ -36,7 +36,6 @@ class HealthAgentNode:
         llm = self.llm
         action_plan = state.get("action_plan", "")
 
-        # if state.get("inference_decision") == "Positive":
         prompt = f"""
         You are a friendly and professional medical assistant.
 
