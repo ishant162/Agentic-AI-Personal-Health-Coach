@@ -64,5 +64,6 @@ Follow the steps below to set up and run the project locally:
    ```bash
    streamlit run app.py
 
-## How it Looks
+## Here's the user interface.
+<img width="1431" height="817" alt="Frontend_ss" src="https://github.com/user-attachments/assets/cad0d671-86c3-4d2b-9ad0-a6851c825712" />
 
