@@ -25,24 +25,20 @@ class LoadStreamlitUI:
         # Tailwind-inspired styling
         st.markdown("""
             <style>
-                html, body, [data-testid="stAppViewContainer"] {
-                    height: 100%;
+                /* Apply gradient to the full app container */
+                [data-testid="stAppViewContainer"] {
+                    background: linear-gradient(to bottom right, #ffffff, #a3d5f7);
+                    background-attachment: fixed;
+                }
+
+                /* Optional: remove padding/margin from body */
+                html, body {
                     margin: 0;
                     padding: 0;
-                    background: linear-gradient(
-                        to bottom right,s
-                        #ffffff,
-                        #a3d5f7
-                    );
-                    background-attachment: fixed;
-                    font-family: 'Segoe UI', sans-serif;
-                    color: #1f2937;
+                    height: 100%;
                 }
 
-                [data-testid="stAppViewContainer"] > div:first-child {
-                    padding: 2rem;
-                }
-
+                /* Input fields */
                 .stTextArea textarea, .stTextInput input {
                     background-color: #ffffff;
                     border-radius: 0.75rem;
@@ -58,6 +54,7 @@ class LoadStreamlitUI:
                     border-color: #60a5fa;
                 }
 
+                /* Button styling */
                 .stButton button {
                     background-color: #3b82f6;
                     color: white;
@@ -74,6 +71,7 @@ class LoadStreamlitUI:
                     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
                 }
 
+                /* Chat bubble */
                 .chat-bubble {
                     background-color: #e0f2ff;
                     color: #1f2937;
@@ -85,6 +83,7 @@ class LoadStreamlitUI:
                     font-size: 1rem;
                     line-height: 1.6;
                     animation: fadeIn 0.5s ease-in-out;
+                    white-space: pre-wrap;
                 }
 
                 @keyframes fadeIn {
@@ -92,7 +91,7 @@ class LoadStreamlitUI:
                     to { opacity: 1; transform: translateY(0); }
                 }
             </style>
-        """, unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
 
         st.markdown(f"# {self.title}")
         st.markdown(

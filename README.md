@@ -62,4 +62,7 @@ Follow the steps below to set up and run the project locally:
    
 5. **Run the app**
    ```bash
-   python app.py
+   streamlit run app.py
+
+## How it Looks
+
