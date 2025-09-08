@@ -11,3 +11,4 @@ faiss-cpu
 chromadb
 langchain_chroma
 streamlit
+git+https://github.com/securefederatedai/openfederatedlearning.git

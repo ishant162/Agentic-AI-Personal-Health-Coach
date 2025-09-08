@@ -1,0 +1,6 @@
+settings:
+  director_host: localhost
+  director_port: 50050
+  
+India:
+  private_attrs: private_attrs.india_attrs
