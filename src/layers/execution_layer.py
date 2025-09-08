@@ -5,9 +5,18 @@ from langchain_core.messages import SystemMessage, HumanMessage
 from src.tools.execution_tools import get_tools
 
 
-def execute_actions(actions, patient_id, llm):
+def execute_actions(actions, patient_id, llm) -> list:
     """
     Execute the actions given
+
+    Args:
+        actions (list): List of actions to be executed.
+        patient_id (str): The patient ID for whom the actions are
+            to be executed.
+        llm: The language model instance.
+
+    Returns:
+        list: List of responses from the executed actions.
     """
     tools = get_tools()
     llm_with_tools = llm.bind_tools(tools)

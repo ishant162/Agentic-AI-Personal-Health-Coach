@@ -53,7 +53,7 @@ def notify_care_team(patient_id: int) -> None:
     print(f"Notifying care team for Patient_ID {patient_id}...")
 
 
-def get_tools():
+def get_tools() -> list:
     """
     Returns a list of available tools for the patient.
 
@@ -63,7 +63,7 @@ def get_tools():
     return [update_ehr, schedule_appointment, notify_care_team]
 
 
-def create_tool_node(tools):
+def create_tool_node(tools) -> ToolNode:
     """
     Create a tool node for the graph.
     This function initializes a ToolNode with the provided tools
@@ -71,5 +71,8 @@ def create_tool_node(tools):
 
     Args:
         tools (list): A list of tool functions.
+
+    Returns:
+        ToolNode: An instance of ToolNode containing the tools.
     """
     return ToolNode(tools=tools)

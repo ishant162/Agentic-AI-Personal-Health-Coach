@@ -11,9 +11,10 @@ class LoadStreamlitUI:
     def __init__(self):
         self.title = "🩺 Personal AI Health Coach"
 
-    def load_ui(self):
+    def load_ui(self) -> tuple:
         """
         Load the Streamlit UI components.
+
         Returns:
             Tuple[str, int]: user_input and patient_id
         """

@@ -9,6 +9,13 @@ from src.state.state import InferenceDecision
 def llm_inference_decision(user_input: str, llm) -> InferenceDecision:
     """
     Use LLM to make intelligent inference decisions based on user input.
+
+    Args:
+        user_input (str): The user's health-related input.
+        llm: The language model instance.
+
+    Returns:
+        InferenceDecision: The decision object with routing info.
     """
 
     system_prompt = """You are a medical triage assistant. Analyze the user's
@@ -72,7 +79,16 @@ def llm_inference_decision(user_input: str, llm) -> InferenceDecision:
 
 
 def parse_llm_response_manually(user_input: str, llm) -> InferenceDecision:
-    """Manually parse LLM response if structured output fails."""
+    """
+    Manually parse LLM response if structured output fails.
+
+    Args:
+        user_input (str): The user's health-related input.
+        llm: The language model instance.
+
+    Returns:
+        InferenceDecision: The decision object with routing info.
+    """
 
     system_prompt = """You are a medical triage assistant. Analyze the user's
     input and decide:
@@ -112,7 +128,15 @@ def parse_llm_response_manually(user_input: str, llm) -> InferenceDecision:
 
 
 def fallback_decision(user_input: str) -> InferenceDecision:
-    """Fallback decision logic if LLM fails."""
+    """
+    Fallback decision logic if LLM fails.
+
+    Args:
+        user_input (str): The user's health-related input.
+
+    Returns:
+        InferenceDecision: The decision object with routing info.
+    """
     symptoms_keywords = [
         "pain",
         "hurt",
@@ -154,9 +178,15 @@ def fallback_decision(user_input: str) -> InferenceDecision:
     )
 
 
-def next_action(risk_score):
+def next_action(risk_score) -> list:
     """
     Determines the next action based on the risk score.
+
+    Args:
+        risk_score (float): The evaluated risk score from the RiskEvaluator.
+
+    Returns:
+        list: List of actions to be taken.
     """
     if risk_score > 0.5:
         return ["schedule_appointment", "notify_care_team", "update_ehr"]

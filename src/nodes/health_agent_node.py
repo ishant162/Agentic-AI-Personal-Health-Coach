@@ -15,12 +15,24 @@ class HealthAgentNode:
     """Health Agent Node for processing health-related queries."""
 
     def __init__(self, model):
+        """
+        Initializes the Health Agent Node with the given LLM model.
+
+        Args:
+            model: The language model instance to be used.
+        """
         self.llm = model
 
     # Node definitions
     def input_parser(self, state: State) -> State:
         """
         Parses user input and extracts relevant information.
+
+        Args:
+            state (State): The current state containing user input.
+
+        Returns:
+            State: Updated state with parsed input.
         """
         print("Parsing user input...")
         state["parsed_input"] = parse_user_input(
@@ -31,6 +43,12 @@ class HealthAgentNode:
     def llm_responder(self, state: State) -> State:
         """
         Generates a response from the LLM based on the execution result.
+
+        Args:
+            state (State): The current state containing execution results.
+
+        Returns:
+            State: Updated state with LLM response.
         """
         print("Generating LLM response...")
         llm = self.llm
@@ -70,7 +88,15 @@ class HealthAgentNode:
         return state
 
     def prompt_engineer(self, state: State) -> State:
-        """Engineers the prompt for the Inference Model"""
+        """
+        Engineers the prompt for the Inference Model
+
+        Args:
+            state (State): The current state containing EHR data.
+
+        Returns:
+            State: Updated state with engineered prompt.
+        """
         print("Engineering prompt with EHR data...")
         state["engineered_prompt"] = generate_inference_prompt(
             state["ehr_data"]
@@ -78,7 +104,15 @@ class HealthAgentNode:
         return state
 
     def risk_evaluator(self, state: State) -> State:
-        """Evaluates the health risk based on the engineered prompt."""
+        """
+        Evaluates the health risk based on the engineered prompt.
+
+        Args:
+            state (State): The current state containing the engineered prompt.
+
+        Returns:
+            State: Updated state with risk score.
+        """
         print("Evaluating health risk...")
         state["risk_score"] = inference_on_patient_data(
             state["engineered_prompt"]
@@ -86,7 +120,15 @@ class HealthAgentNode:
         return state
 
     def inference_decision(self, state: State) -> str:
-        """Makes a decision based on the inference results using LLM."""
+        """
+        Makes a decision based on the inference results using LLM.
+
+        Args:
+            state (State): The current state containing parsed input.
+
+        Returns:
+            str: The decision made by the LLM.
+        """
         print("Planning next steps based on risk assessment...")
 
         parsed_input = state.get("parsed_input", '')
@@ -104,20 +146,44 @@ class HealthAgentNode:
         return result.decision
 
     def decision_planner(self, state: State) -> State:
-        """Plans the next steps based on the risk score."""
+        """
+        Plans the next steps based on the risk score.
+
+        Args:
+            state (State): The current state containing the risk score.
+
+        Returns:
+            State: Updated state with action plan.
+        """
         print("Planning next steps based on risk score...")
         state["action_plan"] = next_action(state["risk_score"])
         return state
 
     def decision_planner_node(self, state: State) -> str:
-        """Determines the next node in the decision planning process."""
+        """
+        Determines the next node in the decision planning process.
+
+        Args:
+            state (State): The current state containing the action plan.
+
+        Returns:
+            str: The next node to transition to ("Positive" or "Negative").
+        """
         if "no_symptoms" in state.get("action_plan", []):
             return "Negative"
         else:
             return "Positive"
 
     def execution_manager(self, state: State) -> State:
-        """Executes the planned actions."""
+        """
+        Executes the planned actions.
+
+        Args:
+            state (State): The current state containing the action plan.
+
+        Returns:
+            State: Updated state with execution messages.
+        """
         print("Executing planned actions...")
         state["messages"] = execute_actions(
             state["action_plan"], state["patient_id"], self.llm
@@ -125,7 +191,15 @@ class HealthAgentNode:
         return state
 
     def ehr_connector(self, state: State) -> State:
-        """Fetches EHR data for the patient."""
+        """
+        Fetches EHR data for the patient.
+
+        Args:
+            state (State): The current state containing patient ID.
+
+        Returns:
+            State: Updated state with EHR data.
+        """
         print("Fetching EHR data...")
         state["ehr_data"] = get_ehr_data(state["patient_id"])
         return state

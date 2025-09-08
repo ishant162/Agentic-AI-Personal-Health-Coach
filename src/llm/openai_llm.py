@@ -26,7 +26,7 @@ class OpenAILLM:
         """
         llm = ChatOpenAI(
             openai_api_base="https://api.generative.engine.capgemini.com/v1",
-            openai_api_key=api_key,  # This is required but can be any string
+            openai_api_key=api_key,
             model_name="openai.gpt-4o",  # Specify the OpenAI model
             default_headers={"x-api-key": api_key},
             temperature=0.7

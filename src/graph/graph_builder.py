@@ -15,6 +15,12 @@ class GraphBuilder:
     """
 
     def __init__(self, model):
+        """
+        Initialize the graph builder with a language model.
+
+        Args:
+            model: The language model to be used in the graph.
+        """
         self.llm = model
         self.graph_builder = StateGraph(State)
         self.health_agent_node = HealthAgentNode(self.llm)
@@ -94,6 +100,9 @@ class GraphBuilder:
     def setup_graph(self) -> StateGraph:
         """
         Setup the graph.
+        
+        Returns:
+            StateGraph: The compiled state graph.
         """
         self.health_agent_workflow_nodes()
         self.health_agent_workflow_edges()
