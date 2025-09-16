@@ -53,6 +53,7 @@ class HealthAgentNode:
         print("Generating LLM response...")
         llm = self.llm
         action_plan = state.get("action_plan", "")
+        user_input = state.get("user_input", "")
 
         prompt = f"""
         You are a friendly and professional medical assistant.
@@ -60,21 +61,29 @@ class HealthAgentNode:
         Here is a summary of the patient's current health-related actions:
         {action_plan}
 
-        Please analyze this summary and generate a short, empathetic message
-        for the patient:
+        The patient has also shared the following concern:
+        "{user_input}"
+
+        Please analyze both the action summary and the patient's input,
+        and generate a short, empathetic message for the patient:
         - If the actions suggest no concerning symptoms (e.g., "no_symptoms"),
-            reassure the patient warmly.
-        - If the actions suggest follow-up steps (e.g., "schedule_appointment"
-            , "notify_care_team", "update_ehr"), explain them clearly and
-            kindly.
+            and the patient's input describes mild or expected discomfort
+            (e.g., post-surgery fatigue), reassure the patient warmly and
+            explain that their experience is normal.
+        - If the actions suggest follow-up steps (e.g., "schedule_appointment",
+            "notify_care_team", "update_ehr"), explain them clearly and
+            kindly, especially in relation to the patient's concern.
+        - If the patient's input indicates something that might need attention
+            but the action plan shows no follow-up, gently acknowledge their
+            concern and reassure them based on the current findings.
         - Always keep the tone supportive, respectful, and easy to understand.
         - Do not include any technical terms or internal instructions—just a
             patient-facing message.
 
         Examples:
         Healthy: "Great news! Based on your recent health check, everything
-        looks good. You're in great shape. Keep taking care of yourself,
-        and don't hesitate to reach out if anything changes."
+            looks good. You're in great shape. Keep taking care of yourself,
+            and don't hesitate to reach out if anything changes."
 
         Concern: "We've identified a few things that may need attention. We've
         taken steps to ensure you're well cared for. Please follow up with your
