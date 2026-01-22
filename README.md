@@ -34,7 +34,7 @@ A digital health agent, powered by an LLM and deployed within each hospital or c
 	- Mobile/Web App:
     Patient interface for interaction, alerts, vitals input, reminders.
 
-## 🚀 Installation & Running Instructions
+## Installation & Running Instructions
 
 Follow the steps below to set up and run the project locally:
 
