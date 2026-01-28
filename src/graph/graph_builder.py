@@ -108,3 +108,25 @@ class GraphBuilder:
         self.health_agent_workflow_edges()
 
         return self.graph_builder.compile()
+
+def visualize_graph(output_path: str = "workflow_diagram.png"):
+    """
+    Visualize the workflow graph (optional, requires graphviz)
+    
+    Args:
+        output_path: Path to save the diagram
+    """
+    try:
+        app = GraphBuilder().setup_graph()
+        
+        # Get the graph representation
+        graph_image = app.get_graph().draw_mermaid_png()
+        
+        with open(output_path, "wb") as f:
+            f.write(graph_image)
+        
+        print(f"Graph visualization saved to {output_path}")
+        
+    except Exception as e:
+        print(f"Could not generate graph visualization: {e}")
+        print("This is optional. Install graphviz if you want visualizations.")
