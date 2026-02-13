@@ -25,10 +25,9 @@ class OpenAILLM:
             ChatOpenAI: An instance of the OpenAI LLM model.
         """
         llm = ChatOpenAI(
-            openai_api_base="https://api.generative.engine.capgemini.com/v1",
-            openai_api_key=api_key,
-            model_name="openai.gpt-4o",  # Specify the OpenAI model
-            default_headers={"x-api-key": api_key},
-            temperature=0.7
+            model="openai.gpt-5.1",  # Specify the OpenAI model you want to use
+            base_url="https://openai.generative.engine.capgemini.com/v1",
+            api_key=api_key,
+            default_headers={"x-api-key": api_key}  # Some implementations require this header
         )
         return llm
