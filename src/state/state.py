@@ -28,3 +28,6 @@ class State(TypedDict):
     risk_score: Optional[int]
     action_plan: Optional[list]
     llm_response: Optional[str]
+    vitals: Optional[List[dict]]
+    medications: Optional[List[dict]]
+    follow_up_tasks: Optional[List[str]]

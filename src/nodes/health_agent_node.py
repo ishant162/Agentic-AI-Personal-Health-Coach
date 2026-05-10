@@ -9,6 +9,7 @@ from src.layers.decision_layer import llm_inference_decision, next_action
 from src.layers.inference_layer import inference_on_patient_data
 from src.layers.execution_layer import execute_actions
 from src.tools.get_ehr_data import get_ehr_data
+from src.tools.health_tracking_tools import log_vital_sign, log_medication_intake, get_proactive_follow_ups
 
 
 class HealthAgentNode:
@@ -211,4 +212,32 @@ class HealthAgentNode:
         """
         print("Fetching EHR data...")
         state["ehr_data"] = get_ehr_data(state["patient_id"])
+        return state
+
+    def vitals_tracker(self, state: State) -> State:
+        """Processes and logs vitals if detected in user input."""
+        print("Processing vitals tracking...")
+        user_input = state.get("user_input", "").lower()
+        # Simple extraction logic for simulation
+        if "bp" in user_input or "blood pressure" in user_input:
+            msg = log_vital_sign(state["patient_id"], "Blood Pressure", "120/80", "mmHg")
+            state["llm_response"] = (state.get("llm_response") or "") + "\n" + msg
+        return state
+
+    def medication_reminder(self, state: State) -> State:
+        """Checks and logs medication adherence."""
+        print("Checking medication adherence...")
+        user_input = state.get("user_input", "").lower()
+        if "took" in user_input or "med" in user_input:
+            msg = log_medication_intake(state["patient_id"], "Prescribed Medication")
+            state["llm_response"] = (state.get("llm_response") or "") + "\n" + msg
+        return state
+
+    def follow_up_generator(self, state: State) -> State:
+        """Generates proactive follow-up questions."""
+        print("Generating proactive follow-up...")
+        follow_ups = get_proactive_follow_ups(state["patient_id"])
+        if follow_ups:
+            msg = f"\nProactive Check-in: {follow_ups[0]}"
+            state["llm_response"] = (state.get("llm_response") or "") + msg
         return state

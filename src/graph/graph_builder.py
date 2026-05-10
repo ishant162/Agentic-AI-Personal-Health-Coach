@@ -64,6 +64,18 @@ class GraphBuilder:
             "LLMResponder",
             self.health_agent_node.llm_responder
         )
+        self.graph_builder.add_node(
+            "VitalsTracker",
+            self.health_agent_node.vitals_tracker
+        )
+        self.graph_builder.add_node(
+            "MedicationReminder",
+            self.health_agent_node.medication_reminder
+        )
+        self.graph_builder.add_node(
+            "FollowUpGenerator",
+            self.health_agent_node.follow_up_generator
+        )
 
     def health_agent_workflow_edges(self) -> None:
         """
@@ -95,7 +107,12 @@ class GraphBuilder:
             tools_condition
         )
         self.graph_builder.add_edge("tools", "LLMResponder")
-        self.graph_builder.add_edge("LLMResponder", END)
+        
+        # New Feature Integration Edges
+        self.graph_builder.add_edge("LLMResponder", "VitalsTracker")
+        self.graph_builder.add_edge("VitalsTracker", "MedicationReminder")
+        self.graph_builder.add_edge("MedicationReminder", "FollowUpGenerator")
+        self.graph_builder.add_edge("FollowUpGenerator", END)
 
     def setup_graph(self) -> StateGraph:
         """
