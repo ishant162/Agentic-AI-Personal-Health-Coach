@@ -9,7 +9,12 @@ from src.layers.decision_layer import llm_inference_decision, next_action
 from src.layers.inference_layer import inference_on_patient_data
 from src.layers.execution_layer import execute_actions
 from src.tools.get_ehr_data import get_ehr_data
-from src.tools.health_tracking_tools import log_vital_sign, log_medication_intake, get_proactive_follow_ups
+from src.tools.health_tracking_tools import (
+    log_vital_sign, 
+    log_medication_intake, 
+    get_proactive_follow_ups,
+    get_patient_health_state
+)
 
 
 class HealthAgentNode:
@@ -27,18 +32,19 @@ class HealthAgentNode:
     # Node definitions
     def input_parser(self, state: State) -> State:
         """
-        Parses user input and extracts relevant information.
-
-        Args:
-            state (State): The current state containing user input.
-
-        Returns:
-            State: Updated state with parsed input.
+        Parses user input and initializes health state from simulated DB.
         """
-        print("Parsing user input...")
+        print("Parsing user input and loading health state...")
         state["parsed_input"] = parse_user_input(
             self.llm, state.get('user_input', '')
         )
+        
+        # Initialize state with data from simulated DB
+        health_record = get_patient_health_state(state["patient_id"])
+        state["vitals"] = health_record.get("vitals", [])
+        state["medications"] = health_record.get("medications", [])
+        state["follow_up_tasks"] = health_record.get("follow_ups", [])
+        
         return state
 
     def llm_responder(self, state: State) -> State:
